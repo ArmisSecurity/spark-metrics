@@ -36,10 +36,13 @@ Add the following lines to metrics configuration file:
 # Support for JMX Collector (version 2.3-2.0.0 +)
 *.sink.prometheus.enable-dropwizard-collector=false
 *.sink.prometheus.enable-jmx-collector=true
-*.sink.prometheus.jmx-collector-config=/opt/spark/conf/monitoring/jmxCollector.yaml
+*.sink.prometheus.jmx-collector-config=/opt/spark/conf/monitoring/jmxCollector.yaml 
 
 # Enable HostName in Instance instead of Appid (Default value is false i.e. instance=${appid})
 *.sink.prometheus.enable-hostname-in-instance=true
+
+# Use custom instance name instead of appid or original instance name 
+*.sink.prometheus.custom-instance-name=my_instance
 
 # Enable JVM metrics source for all instances by class name
 *.sink.jmx.class=org.apache.spark.metrics.sink.JmxSink

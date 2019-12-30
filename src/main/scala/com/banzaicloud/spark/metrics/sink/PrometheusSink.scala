@@ -85,7 +85,11 @@ abstract class PrometheusSink(property: Properties, registry: MetricRegistry)  e
         case _ => metricsNamespace.getOrElse("unknown")
       }
 
-      val instance: String = if (enableHostNameInInstance) InetAddress.getLocalHost.getHostName else sparkAppId.getOrElse("")
+      val instance: String = (enableHostNameInInstance, customHostName) match {
+        case (_, Some(name)) => name
+        case (true, _) => InetAddress.getLocalHost.getHostName
+        case (false, _) => sparkAppId.getOrElse("")
+      }
 
       val appName: String = sparkAppName.getOrElse("")
 
@@ -142,6 +146,7 @@ abstract class PrometheusSink(property: Properties, registry: MetricRegistry)  e
   val KEY_ENABLE_JMX_COLLECTOR = "enable-jmx-collector"
   val KEY_ENABLE_HOSTNAME_IN_INSTANCE = "enable-hostname-in-instance"
   val KEY_JMX_COLLECTOR_CONFIG = "jmx-collector-config"
+  val KEY_CUSTOM_INSTANCE_NAME = "custom-instance-name"
 
  // labels
  val KEY_LABELS = "labels"
@@ -208,6 +213,8 @@ abstract class PrometheusSink(property: Properties, registry: MetricRegistry)  e
     Option(property.getProperty(KEY_ENABLE_HOSTNAME_IN_INSTANCE))
       .map(_.toBoolean)
       .getOrElse(false)
+  val customHostName: Option[String] =
+    Option(property.getProperty(KEY_CUSTOM_INSTANCE_NAME))
   val jmxCollectorConfig =
     Option(property.getProperty(KEY_JMX_COLLECTOR_CONFIG))
       .getOrElse(DEFAULT_KEY_JMX_COLLECTOR_CONFIG)
@@ -223,6 +230,7 @@ abstract class PrometheusSink(property: Properties, registry: MetricRegistry)  e
   logInfo(s"$KEY_METRICS_NAME_REPLACEMENT -> $metricsNameReplacement")
   logInfo(s"$KEY_LABELS -> ${labelsMap.getOrElse("")}")
   logInfo(s"$KEY_JMX_COLLECTOR_CONFIG -> $jmxCollectorConfig")
+  logInfo(s"$KEY_CUSTOM_INSTANCE_NAME -> $customHostName")
 
   val pushRegistry: CollectorRegistry = CollectorRegistry.defaultRegistry
 
