@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit
 import com.banzaicloud.metrics.prometheus.client.exporter.PushGatewayWithTimestamp
 import com.banzaicloud.spark.metrics.DropwizardExportsWithMetricNameCaptureAndReplace
 import com.codahale.metrics._
-import io.prometheus.client.CollectorRegistry
+import io.prometheus.client.{Collector, CollectorRegistry}
 import io.prometheus.client.dropwizard.DropwizardExports
 import org.apache.spark.internal.Logging
 import org.apache.spark.internal.config.METRICS_NAMESPACE
@@ -278,7 +278,7 @@ class PrometheusSink(
 
   private def parseLabel(label: String): (String, String) = {
     label match {
-      case lbv(label, value) => (DropwizardExports.sanitizeMetricName(label), value)
+      case lbv(label, value) => (Collector.sanitizeMetricName(label), value)
       case _ =>
         throw new IllegalArgumentException("Can not parse labels ! Labels should be in label=value separated by commas format.")
     }
