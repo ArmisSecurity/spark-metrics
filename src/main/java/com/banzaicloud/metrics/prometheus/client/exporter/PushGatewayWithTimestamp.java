@@ -74,13 +74,28 @@ public class PushGatewayWithTimestamp {
     private static final Logger logger = LoggerFactory.getLogger(PushGatewayWithTimestamp.class);
     private final String address;
     private static final int SECONDS_PER_MILLISECOND = 1000;
+
+    private final Integer connectionTimeoutSeconds;
+    private final Integer readTimeoutSeconds;
+
     /**
      * Construct a Pushgateway, with the given address.
      * <p>
      * @param address  host:port or ip:port of the Pushgateway.
+     * @param connectionTimeoutSeconds  connection timeout in seconds
+     * @param readTimeoutSeconds  read timeout in seconds
      */
-    public PushGatewayWithTimestamp(String address) {
+    public PushGatewayWithTimestamp(String address,
+                                      Integer connectionTimeoutSeconds,
+                                      Integer readTimeoutSeconds) {
+        logger.info("Initializing PushGatewayWithTimestamp with " +
+                    "connectionTimeoutSeconds=%s " +
+                    "readTimeoutSeconds=%s ",
+                    connectionTimeoutSeconds,
+                    readTimeoutSeconds);
         this.address = address;
+        this.connectionTimeoutSeconds = connectionTimeoutSeconds;
+        this.readTimeoutSeconds = readTimeoutSeconds;
     }
 
     /**
@@ -223,8 +238,8 @@ public class PushGatewayWithTimestamp {
         }
         connection.setRequestMethod(method);
 
-        connection.setConnectTimeout(10 * SECONDS_PER_MILLISECOND);
-        connection.setReadTimeout(10 * SECONDS_PER_MILLISECOND);
+        connection.setConnectTimeout(this.connectionTimeoutSeconds * SECONDS_PER_MILLISECOND);
+        connection.setReadTimeout(this.readTimeoutSeconds * SECONDS_PER_MILLISECOND);
 
         OutputStream outputStream = null;
 

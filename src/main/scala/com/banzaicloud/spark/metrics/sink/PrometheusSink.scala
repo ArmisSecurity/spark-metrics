@@ -240,7 +240,10 @@ class PrometheusSink(
   lazy val jmxMetrics: JmxCollector = new JmxCollector(new File(jmxCollectorConfig))
 
   val pushGateway: PushGatewayWithTimestamp =
-    new PushGatewayWithTimestamp(s"$pushGatewayAddressProtocol://$pushGatewayAddress")
+    new PushGatewayWithTimestamp(s"$pushGatewayAddressProtocol://$pushGatewayAddress",
+      Option(property.getProperty("push-gw-connection-timeout")).map(Integer.valueOf).getOrElse(20),
+      Option(property.getProperty("push-gw-read-timeout")).map(Integer.valueOf).getOrElse(20)
+    )
 
   val reporter = new Reporter(registry)
 
