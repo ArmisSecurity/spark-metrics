@@ -89,8 +89,8 @@ public class PushGatewayWithTimestamp {
                                       Integer connectionTimeoutSeconds,
                                       Integer readTimeoutSeconds) {
         logger.info("Initializing PushGatewayWithTimestamp with " +
-                    "connectionTimeoutSeconds=%s " +
-                    "readTimeoutSeconds=%s ",
+                    "connectionTimeoutSeconds={} " +
+                    "readTimeoutSeconds={} ",
                     connectionTimeoutSeconds,
                     readTimeoutSeconds);
         this.address = address;
