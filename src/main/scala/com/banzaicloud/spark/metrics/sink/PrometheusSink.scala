@@ -85,6 +85,10 @@ class PrometheusSink(
         case _ => "shuffle"
       }
 
+      if (property.getProperty("include-only-driver-metrics", "true") == "true" &&
+        role != "driver")
+        return
+
       val job: String = role match {
         case "driver" => metricsNamespace.getOrElse(sparkAppId.get)
         case "executor" => metricsNamespace.getOrElse(sparkAppId.get)
