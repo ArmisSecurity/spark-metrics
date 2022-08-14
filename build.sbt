@@ -10,6 +10,7 @@ lazy val root = (project in file("."))
       "io.prometheus" % "simpleclient" % "0.9.0",
       "io.prometheus" % "simpleclient_dropwizard" % "0.9.0",
       "io.prometheus" % "simpleclient_pushgateway" % "0.9.0",
+      "io.prometheus" % "simpleclient_httpserver" % "0.9.0",
       "io.dropwizard.metrics" % "metrics-core" % "3.1.2",
       "org.slf4j" % "slf4j-api" % "1.7.16",
       "com.google.guava" % "guava" % "26.0-android",
